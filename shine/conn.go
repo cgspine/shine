@@ -96,3 +96,15 @@ func (c *Conn) Read(b []byte) (n int, err error) {
 	}
 	return
 }
+
+func (c *Conn) Write(b []byte) (n int, err error) {
+	nn := len(b)
+	headerLen := len(b) - nn
+
+	n, err = c.write(b)
+	// Make sure <= 0 <= len(b), where b is the slice passed in.
+	if n >= headerLen {
+		n -= headerLen
+	}
+	return
+}
